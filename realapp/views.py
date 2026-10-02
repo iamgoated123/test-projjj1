@@ -1,18 +1,22 @@
-from django.shortcuts import render, redirect
-from django.http import HttpResponse
-from django.template import loader
-from .forms import Reg_form
-from .models import Registration
+from .models import MyUser1
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from .serializers import User1Serializer
 # Create your views here.
 
-def index(request):
-    if request.method == 'POST':
-        form = Reg_form(request.POST)
-        return HttpResponse("You have registered")
+@api_view(['GET'])
+def get_user_profile_data(request, pk):
     
-    return render(request, 'realapp/index.html', {'form' : Reg_form})
+    try:
+        try:
+            user = MyUser1.objects.get(username=pk)
+        except MyUser1.DoesNotExist:
+            return Response({'error':'user does not exist'})
 
-def main_page(request):
-    users = Registration.objects.all()
-    context = {'users': users}
-    return render(request, 'realapp/mainpage.html', context)
+        serializer = User1Serializer(user, many=False)
+        return Response(serializer.data)
+    except:
+        return Response({'error':'error getting user data'})
+    
+
+ 

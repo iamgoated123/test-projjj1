@@ -1,8 +1,8 @@
 from django.urls import path
-
+from django.conf import settings
 from . import views
+from .views import get_user_profile_data
 
 urlpatterns = [
-    path("", views.index, name="index"),
-    path("mainpage", views.main_page, name="main")
+    path('user_data/<str:pk>/', get_user_profile_data)
 ]

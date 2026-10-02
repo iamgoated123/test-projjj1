@@ -1,12 +1,12 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 # Create your models here.
 
-class Registration(models.Model):
-    fname = models.CharField(max_length=100, help_text="enter your first name")
-    lname = models.CharField(max_length=100, help_text="enter your last name")
-    email = models.EmailField(max_length=100, help_text="enter your email")
+class MyUser1(AbstractUser):
+    bio = models.CharField(max_length=250)
+    username = models.CharField(max_length=50, unique=True, primary_key=True)
+    followers = models.ManyToManyField('self', symmetrical=False, related_name='following')
+
     def __str__(self):
-        return f"userID {self.id}, {self.fname}, {self.lname}"
-class MainPage(models.Model):
-    pass
+        return self.username
+
